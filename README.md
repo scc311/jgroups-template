@@ -1,5 +1,7 @@
 # JGroups Coursework Template
 
+[![Rolling Docker Release](https://github.com/scc311/jgroups-template/actions/workflows/rolling.yml/badge.svg?branch=main)](https://github.com/scc311/jgroups-template/actions/workflows/rolling.yml)
+
 This is a **template** repository that you can use for the final stage of the SCC311 coursework with Docker. An example program that uses both Java RMI and JGroups has been provided here.
 
 ## Why?
