@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+
+  frontend:
+    container_name: frontend_server
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    volumes:
+      - ./shared:/shared:rw
+    environment:
+      - GROUP=RAND_NUMBER_GROUP # the group name is read from the system envionment variables
+
+  backend: # this can't use `container_name` because it won't work with `scale`
+    scale: 5
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    environment:
+      - GROUP=RAND_NUMBER_GROUP
+
+  client:
+    scale: 3
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    volumes:
+      - ./shared:/shared:rw
+    command:
+      - "5" # min value of random
+      - "50" # max value of random

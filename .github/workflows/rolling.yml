@@ -1,0 +1,75 @@
+name: Rolling Docker Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker-build-push:
+    name: Build & Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Push Frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: "./frontend/Dockerfile"
+          platforms: linux/amd64,linux/arm64/v8
+          push: true
+          build-args: |
+            JGROUPS_VERSION=3.6.20
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/random-number-frontend:latest
+          no-cache: false
+          labels: |
+            org.opencontainers.image.title=random-number-frontend
+            org.opencontainers.image.description=${{ github.event.repository.description }}
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+      - name: Build and Push Backend
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: "./backend/Dockerfile"
+          platforms: linux/amd64,linux/arm64/v8
+          push: true
+          build-args: |
+            JGROUPS_VERSION=3.6.20
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/random-number-backend:latest
+          no-cache: false
+          labels: |
+            org.opencontainers.image.title=random-number-backend
+            org.opencontainers.image.description=${{ github.event.repository.description }}
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+      - name: Build and Push Client
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: "./client/Dockerfile"
+          platforms: linux/amd64,linux/arm64/v8
+          push: true
+          build-args: |
+            JAVA_VERSION=11
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/random-number-client:latest
+          no-cache: false
+          labels: |
+            org.opencontainers.image.title=random-number-client
+            org.opencontainers.image.description=${{ github.event.repository.description }}
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
