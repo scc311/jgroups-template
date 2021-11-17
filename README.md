@@ -4,6 +4,8 @@
 
 This is a **template** repository that you can use for the final stage of the SCC311 coursework with Docker. An example program that uses both Java RMI and JGroups has been provided here.
 
+> ⚠️  **Warning**: Having coursework on a _public_ repository can have particularly serious consequences (even after you graduate)!
+
 ## Why?
 
 This template makes it easy to start building your coursework with source control and docker, all you need is a GitHub account and Docker installed. Because this uses docker, you don't need any Java versions installed on you machine and you can easily build and run all components of the work (including the registry and the addition of `jgroups` to the Java classpath).
