@@ -74,6 +74,8 @@ docker compose up --scale client=7 client # to start your clients
 docker compose down client # to remove your clients
 ```
 
+> For systems that have the old (python-based) `docker-compose` tool installed, the above commands will need the `docker compose` changed to `docker-compose`
+
 ### Environment Variables
 
 The utility package contains a class called `GroupUtils`. This provides the code to connect to a JChannel. Much like with RMI, the service is attached to a key, in this case a string. So that this is not baked in during the compilation (a bad practice), this can read the data from an **environment variable** called `GROUP`. The `docker-compose.yml` file shows how to set these when using `docker compose`, however, these can easily be set when running containers by the `docker run` command too: `docker run ... -e GROUP=EXAMPLE ...`. And you can set env vars when not using docker too like so: `export GROUP=EXAMPLE_NO_DOCKER`.
