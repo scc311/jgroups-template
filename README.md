@@ -16,7 +16,7 @@ Below is a table showing which platforms this has been tested on. If this works 
 
  | Docker for MacOS | Docker for Linux | Docker for Windows (WSL2 Backend) |
  | :--------------: | :--------------: | :-------------------------------: |
- |        ✅         |        ❓         |                 ❓                 |
+ |        ✅         |        ✅         |                 ❓                 |
 
 ---
 
