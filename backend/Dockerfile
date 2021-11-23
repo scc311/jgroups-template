@@ -12,4 +12,4 @@ FROM ghcr.io/scc311/jgroups:jre-${JGROUPS_VERSION}
 WORKDIR /app/backend
 COPY --from=builder /src/backend .
 
-ENTRYPOINT ["java", "backend.Backend"]
+ENTRYPOINT ["java", "-Djava.net.preferIPv4Stack=true", "backend.Backend"]

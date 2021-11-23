@@ -13,4 +13,4 @@ FROM ghcr.io/scc311/jgroups:jre-${JGROUPS_VERSION}
 WORKDIR /app/frontend
 COPY --from=builder /src/frontend .
 
-ENTRYPOINT ["java", "frontend.Frontend"]
+ENTRYPOINT ["java", "-Djava.net.preferIPv4Stack=true", "frontend.Frontend"]
