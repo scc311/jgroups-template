@@ -1,6 +1,9 @@
 package frontend;
 
+import org.jgroups.Address;
 import org.jgroups.JChannel;
+import org.jgroups.MembershipListener;
+import org.jgroups.View;
 import org.jgroups.blocks.RequestOptions;
 import org.jgroups.blocks.ResponseMode;
 import org.jgroups.blocks.RpcDispatcher;
@@ -12,11 +15,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 
 import utility.GroupUtils;
 
-public class Frontend extends UnicastRemoteObject implements API {
+public class Frontend extends UnicastRemoteObject implements API, MembershipListener {
 
   public static final long serialVersionUID = 42069;
 
@@ -40,6 +42,7 @@ public class Frontend extends UnicastRemoteObject implements API {
 
     // Make this instance of Frontend a dispatcher in the channel (group)
     this.dispatcher = new RpcDispatcher(this.groupChannel, this);
+    this.dispatcher.setMembershipListener(this);
 
   }
 
@@ -47,19 +50,20 @@ public class Frontend extends UnicastRemoteObject implements API {
     try {
       Registry registry = LocateRegistry.createRegistry(this.REGISTRY_PORT);
       registry.rebind(serverName, this);
-      System.out.println("✅  rmi server running...");
+      System.out.println("✅    rmi server running...");
     } catch (Exception e) {
-      System.err.println("🆘   exception:");
+      System.err.println("🆘    exception:");
       e.printStackTrace();
       System.exit(1);
     }
   }
 
   public float getRandom(int min, int max) throws RemoteException {
-    System.out.printf("📩   random number request via rmi\n🧮   %d -> %d\n", min, max);
+    System.out.printf("📩    random number request via rmi\n🧮    %d -> %d\n", min, max);
     try {
 
-      // Call the "generateRandomNumber" function on all the group members, passing 2 params of object class integer
+      // Call the "generateRandomNumber" function on all the group members, passing 2
+      // params of object class integer
       RspList<Integer> responses = this.dispatcher.callRemoteMethods(null, "generateRandomNumber",
           new Object[] { min, max }, new Class[] { int.class, int.class },
           new RequestOptions(ResponseMode.GET_ALL, this.DISPATCHER_TIMEOUT));
@@ -76,17 +80,33 @@ public class Frontend extends UnicastRemoteObject implements API {
 
       return average / responses.size();
     } catch (Exception e) {
-      System.err.println("🆘   dispatcher exception:");
+      System.err.println("🆘    dispatcher exception:");
       e.printStackTrace();
     }
     return 0.0f;
+  }
+
+  public void viewAccepted(View newView) {
+    System.out.printf("👀    jgroups view changed\n✨    new view: %s\n", newView.toString());
+  }
+
+  public void suspect(Address suspectedMember) {
+    System.out.printf("👀    jgroups view suspected member crash: %s\n", suspectedMember.toString());
+  }
+
+  public void block() {
+    System.out.printf("👀    jgroups view block indicator\n");
+  }
+
+  public void unblock() {
+    System.out.printf("👀    jgroups view unblock indicator\n");
   }
 
   public static void main(String args[]) {
     try {
       new Frontend();
     } catch (RemoteException e) {
-      System.err.println("🆘   remote exception:");
+      System.err.println("🆘    remote exception:");
       e.printStackTrace();
       System.exit(1);
     }
