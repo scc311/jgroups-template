@@ -1,1 +1,8 @@
+# my vscode settings you don't need
 .vscode
+
+# any compiled files
+*/*.class
+
+# a local copy of jgroups jar
+library/
