@@ -48,7 +48,11 @@ For the final coursework, you will need to create 3 separate entities that commu
 
 Each directory that contains code is its own package, so compilation should happen from the root directory of this repository.
 
-## Using Docker
+## Not Using Docker? 😢
+
+You can use this template without docker if you'd like... However, as this uses packages, I'd suggest you check out [this guide](https://github.com/scc311/jgroups-base-image/blob/main/TUTORIAL.md) on using JGroups (and this template specifically) with just `javac`.
+
+## Using Docker?
 
 If you are using docker, each directory that contains a `main` function has a `Dockerfile`. Each of these `Dockerfile`s use multi-stage building so that built docker images don't contain the full JDK, just the JRE (so a smaller image size). This means that after each code edit you will need to run the relevant `docker build` before re-running.
 
