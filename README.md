@@ -14,10 +14,22 @@ This template makes it easy to start building your coursework with source contro
 
 Below is a table showing which platforms this has been tested on. If this works on a platform not yet verified as working (and you are comfortable using GitHub), please update this table in a Pull Request.
 
+Or, if this table appears to not be accurate, you can create an issue on GitHub and it will be investigated.
+
+### Using Docker 🤌
+
  | Docker for MacOS | Docker for Linux | Docker for Windows (WSL2 Backend) |
  | :--------------: | :--------------: | :-------------------------------: |
  |        ✅         |        ✅         |                 ❓                 |
 
+
+### No Docker 😢
+
+ |               Lab Machines 📠                |           MacOS 🍎           | Linux 🐧 |        Windows 💩         |
+ | :-----------------------------------------: | :-------------------------: | :-----: | :----------------------: |
+ | ✅ (prefer ipv4 & bind address flags needed) | ✅ (prefer ipv4 flag needed) |    ✅    | ✅ (no wildcard packages) |
+
+---
 
 ## Repository Design
 
