@@ -13,7 +13,8 @@ services:
     environment:
       - GROUP=RAND_NUMBER_GROUP # the group name is read from the system envionment variables
 
-  backend: # this can't use `container_name` because it won't work with `scale`
+  backend:
+    # this can't use `container_name` because it won't work with `scale`
     scale: 5
     network_mode: "host"
     build:
