@@ -1,9 +1,6 @@
 package frontend;
 
-import org.jgroups.Address;
 import org.jgroups.JChannel;
-import org.jgroups.MembershipListener;
-import org.jgroups.View;
 import org.jgroups.blocks.RequestOptions;
 import org.jgroups.blocks.ResponseMode;
 import org.jgroups.blocks.RpcDispatcher;
@@ -18,7 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import utility.GroupUtils;
 
-public class Frontend extends UnicastRemoteObject implements API, MembershipListener {
+public class Frontend extends UnicastRemoteObject implements API {
 
   public static final long serialVersionUID = 42069;
 
@@ -42,7 +39,7 @@ public class Frontend extends UnicastRemoteObject implements API, MembershipList
 
     // Make this instance of Frontend a dispatcher in the channel (group)
     this.dispatcher = new RpcDispatcher(this.groupChannel, this);
-    this.dispatcher.setMembershipListener(this);
+    this.dispatcher.setMembershipListener(new MembershipListener());
 
   }
 
@@ -84,22 +81,6 @@ public class Frontend extends UnicastRemoteObject implements API, MembershipList
       e.printStackTrace();
     }
     return 0.0f;
-  }
-
-  public void viewAccepted(View newView) {
-    System.out.printf("👀    jgroups view changed\n✨    new view: %s\n", newView.toString());
-  }
-
-  public void suspect(Address suspectedMember) {
-    System.out.printf("👀    jgroups view suspected member crash: %s\n", suspectedMember.toString());
-  }
-
-  public void block() {
-    System.out.printf("👀    jgroups view block indicator\n");
-  }
-
-  public void unblock() {
-    System.out.printf("👀    jgroups view unblock indicator\n");
   }
 
   public static void main(String args[]) {
