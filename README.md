@@ -66,8 +66,7 @@ You can use this template without docker if you'd like... However, as this uses 
 
 ## Using Docker?
 
-If you are using docker, each directory that contains a `main` function has a `Dockerfile`. Each of these `Dockerfile`s use multi-stage building so that built docker images don't contain the full JDK, just the JRE (so a smaller image size). This means that after each code edit you will need to run the relevant `docker build` before re-running.
-
+If you are using docker, each directory that contains a `main` function has a `Dockerfile`. Each of these `Dockerfile`s use multi-stage building so that built docker images don't contain the full JDK, just the JRE (so a smaller image size). This means that after each code edit you will need to run the relevant `docker build` before re-running
 ### Docker Compose
 
 To make this process quicker, you can use `docker compose`! This will automatically build your containers and run them in one command. It can also make it easier to scale your backend replica servers.
@@ -79,25 +78,57 @@ For compilation:
 docker compose build # will build all 3 services
 ```
 
-For the _backends_:
-```bash
-docker compose up --scale backend=5 backend # to start your backend replicas
-docker compose down backend # to remove your replicas
-```
-
 For the _frontend_:
 ```bash
 docker compose up frontend # to start your frontend
 docker compose down frontend # to remove your frontend
 ```
 
+For the _backends_:
+```bash
+docker compose up --scale backend=5 backend # to start your backend replicas
+docker compose down backend # to remove your replicas
+```
+
 For the _clients_:
 ```bash
-docker compose up --scale client=7 client # to start your clients
+docker compose up --scale client=3 client # to start your clients
 docker compose down client # to remove your clients
 ```
 
 > For systems that have the old (python-based) `docker-compose` tool installed, the above commands will need the `docker compose` changed to `docker-compose`
+
+### Docker Compose++
+
+You can make demoing your code easier with `docker compose` too! 
+
+When using the `docker compose up` command, you can add the `-d` flag so that it will detach from the containers when they start, so effectively running them in the background. If you need to get the output of a container still after you have started it, you can run the following command (where backend is just an example):
+
+```bash
+# get the output from the backends if they have been created with -d
+docker compose logs -f backend
+```
+
+You can check which services of a `docker compose` stack are running in the background with:
+
+```bash
+docker compose ps
+```
+
+If you have a container running that can have variable cardinality (can be `scale`d), you can modify the number of instances up or down easily. Let us say you have `5` instances of `backend` running using the `-d` flag to background them. You can change the cardinality by running the up command again with the new desired count.
+
+```bash
+# - there are no backends running
+
+docker compose up --scale backend=5 -d backend
+# - there are now 5 backends running
+
+docker compose up --scale backend=3 -d backend
+# - 2 backends get killed. there are 3 backends running
+
+docker compose up --scale backend=10 -d backend
+# - 7 backends are added. there are 10 backends running
+```
 
 ### Environment Variables
 
