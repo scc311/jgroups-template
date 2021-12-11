@@ -60,6 +60,8 @@ For the final coursework, you will need to create 3 separate entities that commu
 
 Each directory that contains code is its own package, so compilation should happen from the root directory of this repository.
 
+If you have any code that all 3 entities will need access to, you should create a new package (perhaps with the name `model` or `global`?) that is copied into all 3 Docker images. This does mean that you need to add the command to copy in the new package to all 3 `Dockerfile`s.
+
 ## Not Using Docker? 😢
 
 You can use this template without docker if you'd like... However, as this uses packages, I'd suggest you check out [this guide](https://github.com/scc311/jgroups-base-image/blob/main/TUTORIAL.md) on using JGroups (and this template specifically) with just `javac`.
